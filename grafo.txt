@@ -1,0 +1,2 @@
+1:"limpar casa";2:"arrumar o quarto";3:"tempo livre";4:"escrever o texto";5:"escovar os dentes"
+1->2;2->3;3->4;5->1
