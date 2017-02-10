@@ -1,2 +1,2 @@
-0:"limpar casa";1:"arrumar o quarto";2:"tempo livre";3:"escrever o texto";4:"escovar os dentes";5:"sair de casa";6:"esperar o Náutico ser campeão de porrinha";7:"ver o Santa campeão e ver o Sport vice de novo"
-0->1;0->2;0->3;1->2;1->6;1->5;2->5;2->6;3->5;4->6;4->7
+1:"casa de praia";2:"terra redonda";3:"náutico rebaixado";4:"cada um em seu lugar";5:"pênalti para o corinthians"
+1->2;2->3;3->4

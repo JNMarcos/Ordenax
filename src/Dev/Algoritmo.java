@@ -47,11 +47,11 @@ public class Algoritmo {
 
 		arestasChave = listaTemporaria;
 		listaTemporaria = null;
-		for (int i = 0; i < nVertices; i++){
+		for (int i = 0; i < nVertices && isCiclico == false; i++){
 			isEntrada = true;
 			possuiAoMenosUmaSaida = false;
 			possiveisCiclosTempo = new ArrayList<>();
-			for (int j = 0; j < nVertices; j++){
+			for (int j = 0; j < nVertices && isCiclico == false; j++){
 				jaFoiAdicionado = false;
 				if (grafo.getArestas().get(arestasChave.get(j)).contains(arestasChave.get(i))){
 					isEntrada = false; //se os vértices forem dif então não é de entrada
@@ -60,62 +60,42 @@ public class Algoritmo {
 					}
 				}
 
-				System.out.println(arestasChave);
-				System.out.println("i "+arestasChave.get(i));
-				System.out.println("j "+arestasChave.get(j));
-
 				if (grafo.getArestas().get(arestasChave.get(i)).contains(arestasChave.get(j))){
-					System.out.println("iteração " + ++h);
 					possuiAoMenosUmaSaida = true;
 
-					System.out.println("Tamanho poss" + possiveisCiclos.size());
-					System.out.println(possiveisCiclos);
 					possiveisCiclosTempo.clear();
-					System.out.println("Tempo " + possiveisCiclosTempo);
+
 					for (int l = 0; l < possiveisCiclos.size(); l++){
-						//&& possuiAoMenosUmaSaida == false; l++){
-						//System.out.println(possiveisCiclos.get(l));
 						possiveisCiclosTempo.add(possiveisCiclos.get(l));
-						//System.out.println(possiveisCiclos.get(l));
 					}
 
 					if (possiveisCiclos.size() > 0){//existe uma lista
-						System.out.println("entrou ali");
-						for (int k = 0; k < possiveisCiclos.size(); k++){
+						for (int k = 0; k < possiveisCiclos.size() && isCiclico == false; k++){
 							if (possiveisCiclos.get(k).contains(arestasChave.get(i))
 									&& possiveisCiclos.get(k).lastIndexOf(arestasChave.get(i)) == possiveisCiclos.get(k).size() - 1
 									){
 								possiveisCiclosTempo.get(k).add(arestasChave.get(j));
-								
-								String aux = possiveisCiclosTempo.get(k).toString();
-								System.out.println(aux);
-								for (int v = 0; v < possiveisCiclosTempo.get(k).size(); v++){
-									System.out.println(possiveisCiclosTempo.get(k).get(v));
-									if (aux.split("" + possiveisCiclosTempo.get(k).get(v)).length >= 3){
-										System.out.println("aux " + aux);
-										isCiclico = true;
+
+								for (int v = 0; v < possiveisCiclosTempo.get(k).size() - 1; v++){
+									for (int w = v + 1; w < possiveisCiclosTempo.get(k).size(); w++){
+										if (possiveisCiclosTempo.get(k).get(v) == possiveisCiclosTempo.get(k).get(w)){
+											isCiclico = true;
+											mensagem = "\nPrimeiro ciclo encontrado: " + possiveisCiclos.get(k) + "\n";
+											break;
+										}
 									}
 								}
-								System.out.println("Entrou aqui");
 							} else {
-								System.out.println("é aqui porra");
 								temp = new ArrayList<>();
 								temp.add(arestasChave.get(i));
 								temp.add(arestasChave.get(j));
 								possiveisCiclosTempo.add(temp);
-								//System.out.println("ciclos" + possiveisCiclos);
-								System.out.println("Possiveisteo " + possiveisCiclosTempo);
 							}
 						}
 
 
 						possiveisCiclos.add(possiveisCiclosTempo.get(possiveisCiclosTempo.size() - 1));
-
-						//possiveisCiclos = possiveisCiclosTempo;
-						//possiveisCiclos.addAll(possiveisCiclosTempo);
-						//possiveisCiclosTempo = new ArrayList<>();
 					} else {
-						System.out.println("Chegou aqui");
 						possuiAoMenosUmaSaida = true;
 						temp = new ArrayList<>();
 						temp.add(arestasChave.get(i));
@@ -123,30 +103,20 @@ public class Algoritmo {
 						possiveisCiclos.add(temp);
 					}
 				}
-
-				System.out.println(possiveisCiclos);
-
-				
-				System.out.println("aqui" + possiveisCiclos + "tam " + possiveisCiclos.size());
-
-
 			}
-			
+
 			//REVER CASO DE ERRO
 			int retira = 0;
 			if (possuiAoMenosUmaSaida == false){
 				for (int k = 0; k < possiveisCiclos.size() - retira; k++){
 					if (possiveisCiclos.get(k).contains(arestasChave.get(i))){
-						System.out.println("SAÍDA " + possiveisCiclos.get(k));
 						possiveisCiclos.remove(k);
-						System.out.println(possiveisCiclos);
 						retira++;
 					}
 				}
 			}
 
 			if (isEntrada == true){
-				System.out.println("Entrada: " + arestasChave.get(i) );
 				listaEntrada.add(arestasChave.get(i));
 			} 
 
@@ -161,19 +131,13 @@ public class Algoritmo {
 
 		System.out.println("\nNº de Vértices " + arestasChave.size());
 		System.out.println("Nº de Arestas: " + somaArestas);
-		System.out.println("Nº de Arestas Duplas: " + somaContrario);
-		System.out.println("Diferença entre Arestas: " +difArestas);
 
 		if (isCiclico == true){//difArestas >= nVertices && isCiclico == true){
 			//isCiclico = true;
-			mensagem = "\nO grafo inserido é cíclico. Então não podemos fazer uma ordem "
+			mensagem += "\nO grafo inserido é cíclico. Então não podemos fazer uma ordem "
 					+ "topológica dele.\nModifique o arquivo para que o grafo seja não cíclico."
 					+ "\nTente, não é difícil.";
 		} 
-
-		for (int k = 0; k < listaEntrada.size(); k++){
-			System.out.println(listaEntrada.get(k));
-		}
 
 		return mensagem;
 	}
@@ -190,18 +154,17 @@ public class Algoritmo {
 			System.out.println("\nHá elementos na lista");
 			//elOrdenados.add(listaEntrada.get(0));
 
-
+			System.out.println("Lista de Entrada" + listaEntrada);
 			valor = listaEntrada.get(0);
-			System.out.println("Chave do Vértice " + valor);
+			System.out.println("1º Vértice da Lista de Entrada " + valor);
 
 			for (int i = 0; i < grafo.getArestas().get(valor).size(); i++){
 				temporario.add(grafo.getArestas().get(valor).get(i));
 			}
 
-			System.out.println("Lista de Vértices Conectados à Chave" + temporario);
+			System.out.println("Lista de Vértices Conectados à Chave " + temporario);
 			elOrdenados.add(valor);
 			System.out.println("Elementos Parcialmente Ordenados " + elOrdenados);
-			System.out.println("Lista Entrada" + listaEntrada);
 			listaEntrada.remove(0);
 			System.out.println("Removeu da lista de entrada o valor");
 			System.out.println("Lista Entrada" + listaEntrada);

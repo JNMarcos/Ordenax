@@ -22,10 +22,12 @@ public class Main {
 		String[] conteudoRepartido;
 		String caminhoArquivo = "grafo.txt";
 		Grafo grafo = new Grafo();
-		
+
 		List<Integer> listaOrdenada;
 
 		String mensagem;
+		String imprimir;
+		String vertices = "";
 
 		FileReader fr;
 		BufferedReader br = null;
@@ -45,14 +47,19 @@ public class Main {
 		conteudoRepartido = conteudo.split(";");
 
 		//Nessa etapa é capturado todos os nós/vértice do grafo e seu conteúdo
-		System.out.println("Ações: ");
+		imprimir = "Ações: \n";
 		for (int i = 0; i < conteudoRepartido.length; i++){
 			no = new No();
-			no.setChave(Integer.parseInt(conteudoRepartido[i].split(":")[0]));
+			try{
+				no.setChave(Integer.parseInt(conteudoRepartido[i].split(":")[0]));
+			} catch (NumberFormatException e) {
+				System.out.println("Formatação do documento está comprometida.");
+			}
+
 			no.setValor((conteudoRepartido[i].split(":")[1]).replace("\"", ""));
 
-			System.out.print(no.getChave() + " ");
-			System.out.println(no.getValor());
+			vertices += "-" + no.getChave() + "-";
+			imprimir += no.getChave() + " " + no.getValor() + "\n";
 
 			grafo.setVertice(no);
 			grafo.setArestas(no.getChave(), new ArrayList<Integer>());
@@ -67,14 +74,26 @@ public class Main {
 		conteudoRepartido = conteudo.split(";");
 
 		//Nessa parte é capturado as arestas do grafo
-		System.out.println("\nArestas: ");
+		imprimir += "\nArestas: \n";
+		VerticeNaoExisteNoGrafoException e = null;
 		for (int i = 0; i < conteudoRepartido.length; i++){
-			grafo.setArestaAdj(Integer.parseInt(conteudoRepartido[i].split("->")[0]),
-					Integer.parseInt(conteudoRepartido[i].split("->")[1]));
+if (vertices.contains("-" + conteudoRepartido[i].split("->")[0] + "-")
+					&& vertices.contains("-" + conteudoRepartido[i].split("->")[1] + "-")){
+				grafo.setArestaAdj(Integer.parseInt(conteudoRepartido[i].split("->")[0]),
+						Integer.parseInt(conteudoRepartido[i].split("->")[1]));
 
-			System.out.print(Integer.parseInt(conteudoRepartido[i].split("->")[0]) + " -> ");
-			System.out.println(Integer.parseInt(conteudoRepartido[i].split("->")[1]));
+				imprimir += Integer.parseInt(conteudoRepartido[i].split("->")[0]) + " -> ";
+				imprimir += Integer.parseInt(conteudoRepartido[i].split("->")[1]) + "\n";
+			} else {
+				if (e == null){
+					e = new VerticeNaoExisteNoGrafoException();
+					System.out.println(e.getMessage());
+					break;
+				}
+			}
 		}
+
+		System.out.println(imprimir);
 
 		Algoritmo ordenacao = new Algoritmo(grafo);
 
