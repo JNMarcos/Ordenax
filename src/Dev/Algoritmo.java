@@ -4,6 +4,7 @@
 package Dev;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,9 +18,11 @@ public class Algoritmo {
 	private List<Integer> arestasChave;
 	private List<List<Integer>> possiveisCiclos = new ArrayList<List<Integer>>(); 
 	private List<List<Integer>> possiveisCiclosTempo = new ArrayList<List<Integer>>();
-	int h = 0;
-	public Algoritmo(Grafo grafo){
+	private String tipoOrdenacao;
+	
+	public Algoritmo(Grafo grafo, String tipoOrdenacao){
 		this.grafo = grafo;
+		this.tipoOrdenacao = tipoOrdenacao;
 	}
 
 	public String isCiclico(){
@@ -27,10 +30,15 @@ public class Algoritmo {
 
 		List<Integer> temp;
 		boolean possuiAoMenosUmaSaida;
+
+
 		boolean jaFoiAdicionado;
 		String mensagem = "\nO grafo não é cíclico. Não fez mais que sua obrigação!";
 		List<Integer> arestasChave = new ArrayList<>(grafo.getArestas().keySet());
 		this.arestasChave = arestasChave;
+
+		int[] estaNoGrafo = new int[arestasChave.size()];
+		Arrays.fill(estaNoGrafo, 0);
 
 		List<Integer> listaTemporaria = new ArrayList<Integer>();
 		int nVertices = arestasChave.size();
@@ -47,11 +55,11 @@ public class Algoritmo {
 
 		arestasChave = listaTemporaria;
 		listaTemporaria = null;
-		for (int i = 0; i < nVertices && isCiclico == false; i++){
+		for (int i = 0; isCiclico == false && i < nVertices; i++){
 			isEntrada = true;
 			possuiAoMenosUmaSaida = false;
 			possiveisCiclosTempo = new ArrayList<>();
-			for (int j = 0; j < nVertices && isCiclico == false; j++){
+			for (int j = 0; isCiclico == false && j < nVertices; j++){
 				jaFoiAdicionado = false;
 				if (grafo.getArestas().get(arestasChave.get(j)).contains(arestasChave.get(i))){
 					isEntrada = false; //se os vértices forem dif então não é de entrada
@@ -62,6 +70,9 @@ public class Algoritmo {
 
 				if (grafo.getArestas().get(arestasChave.get(i)).contains(arestasChave.get(j))){
 					possuiAoMenosUmaSaida = true;
+
+					estaNoGrafo[i] = 1;
+					estaNoGrafo[j] = 1;
 
 					possiveisCiclosTempo.clear();
 
@@ -116,7 +127,7 @@ public class Algoritmo {
 				}
 			}
 
-			if (isEntrada == true){
+			if (isEntrada == true && estaNoGrafo[i] == 1){
 				listaEntrada.add(arestasChave.get(i));
 			} 
 
@@ -151,6 +162,13 @@ public class Algoritmo {
 
 		while (listaEntrada.size() >= 1){
 			aindaTem = false;
+			//reorganizar aqui
+			if (tipoOrdenacao.equals(">") && listaEntrada.size() >=1){
+				listaEntrada = reordenarMaior(listaEntrada);
+			} else if (tipoOrdenacao.equals("<") && listaEntrada.size() >=1){
+				listaEntrada = reordenarMenor(listaEntrada);
+			}//se for diferente disso faz o padrão
+			
 			System.out.println("\nHá elementos na lista");
 			//elOrdenados.add(listaEntrada.get(0));
 
@@ -172,7 +190,7 @@ public class Algoritmo {
 
 			for (int i = 0; i < temporario.size(); i++){
 				aindaTem = false;
-				System.out.println("Valor temporário " + temporario.get(i));
+				System.out.println("Valor Temporário (próximo a tentar ser adicionado) " + temporario.get(i));
 				grafo.getArestas().get(valor).remove(temporario.get(i));
 				for  (int j = 0; j < arestasChave.size(); j++){
 					if (grafo.getArestas().get(arestasChave.get(j)) != null && 
@@ -184,13 +202,51 @@ public class Algoritmo {
 
 				if (aindaTem == false && temporario != null){
 					listaEntrada.add(temporario.get(i));
-					System.out.println("Adiciona a lista entrada " + temporario.get(i));
+					System.out.println("Adiciona " + temporario.get(i) + " Lista de Entrada");
 				}
 			}
+
 			temporario.clear();
 		}
 		return elOrdenados;
 	}
 
+	private List<Integer> reordenarMaior(List<Integer> listaAOrdenar){
+		List<Integer> novaLista = new ArrayList<Integer>();
+		novaLista.add(listaAOrdenar.get(0));
+		for (int i = 1; i < listaAOrdenar.size(); i++){
+			for (int j = 0; j < novaLista.size(); j++){
+				if (listaAOrdenar.get(i) > novaLista.get(j)){
+					novaLista.add(j, listaAOrdenar.get(i));
+					break;
+				}
+			}
+			
+			if (!novaLista.contains(listaAOrdenar.get(i))){
+				novaLista.add(listaAOrdenar.get(i));
+			}
+		}
+		return novaLista;
+	}
+
+	private List<Integer> reordenarMenor(List<Integer> listaAOrdenar){
+		List<Integer> novaLista = new ArrayList<Integer>();
+		novaLista.add(listaAOrdenar.get(0));
+		for (int i = 1; i < listaAOrdenar.size(); i++){
+			for (int j = 0; j < novaLista.size(); j++){
+				if (listaAOrdenar.get(i) < novaLista.get(j)){
+					novaLista.add(j, listaAOrdenar.get(i));
+					System.out.println("NOva " + novaLista);
+					break;
+				}
+			}
+			
+			if (!novaLista.contains(listaAOrdenar.get(i))){
+				novaLista.add(listaAOrdenar.get(i));
+			}
+		}
+		
+		return novaLista;
+	}
 }
 

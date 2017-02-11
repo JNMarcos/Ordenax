@@ -92,10 +92,17 @@ if (vertices.contains("-" + conteudoRepartido[i].split("->")[0] + "-")
 				}
 			}
 		}
+		
+		try {
+			conteudo = br.readLine();
+		} catch (IOException e1) {
+			System.out.println("Erro na leitura do arquivo");
+		}
 
+		System.out.println("Conteúdo " + conteudo);
 		System.out.println(imprimir);
 
-		Algoritmo ordenacao = new Algoritmo(grafo);
+		Algoritmo ordenacao = new Algoritmo(grafo, conteudo);
 
 		mensagem = ordenacao.isCiclico();
 		System.out.println(mensagem);
