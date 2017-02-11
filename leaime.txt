@@ -1,0 +1,24 @@
+Para usar o programa Ordenax:
+1º Abra o arquivo grafo.txt, que se encontra dentro da pasta da raiz do projeto
+2º Na primeira linha do arquivo, escreva todos os nós contidos no grafo, seguido de sua decrição. Ex.:
+0:"abrir os olhos";1:"tomar forças para se levantar";2:"levantar da cama";3:"ir ao banheiro"
+
+Observe que se usa um inteiro para indicar  a chave, seguido de dois-pontos, e a descrição da tarefa entre aspas duplas. ENTRE cada tarefa (não há no fim), há um ponto e vírgula.
+
+3º Na segunda linha do arquivo há as arestas existentes no grafo. Ex.:
+0->1;1->2;2->3
+
+Observe que se usa as chaves das tarefas para indicar qual procedimento deve ser realizado primeiro.
+tarefa anterior->tarefa posterior
+
+ENTRE cada ação (tarefa anterior->tarefa posterior), existe um ponto e vírgula. Novamente, não há um ponto e vírgula no fim (da última instrução) .
+
+4º Na terceira linha, você adiciona o sinal '<' para a ordenação pelo de índice/chave menor (menor primeiro), o sinal de '>' para ordenação pelo índice/chave maior (maior primeiro) ou '=' ou qualquer outro sinal ou ainda, uma linha vazia, se considerará que não há nenhuma relevância os índices/chaves do grafo para ordenamento. O que for adicionado primeiro à lista de entrada será usado primeiro.
+ 
+
+OBS.: 
+Tanto na definição dos vértices quanto no grafo, não é necessário escrever na ordem;
+def.: 1:"o que eu quero fazer antes";0:"o que eu quero fazer depois"
+graf.:2->3;1->2;0->1
+
+O resultado terá de ser o mesmo que os exemplos mais acima.

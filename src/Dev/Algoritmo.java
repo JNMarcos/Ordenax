@@ -163,9 +163,9 @@ public class Algoritmo {
 		while (listaEntrada.size() >= 1){
 			aindaTem = false;
 			//reorganizar aqui
-			if (tipoOrdenacao.equals(">") && listaEntrada.size() >=1){
+			if (tipoOrdenacao != null && tipoOrdenacao.equals(">") && listaEntrada.size() >=1){
 				listaEntrada = reordenarMaior(listaEntrada);
-			} else if (tipoOrdenacao.equals("<") && listaEntrada.size() >=1){
+			} else if (tipoOrdenacao != null && tipoOrdenacao.equals("<") && listaEntrada.size() >=1){
 				listaEntrada = reordenarMenor(listaEntrada);
 			}//se for diferente disso faz o padrão
 			
